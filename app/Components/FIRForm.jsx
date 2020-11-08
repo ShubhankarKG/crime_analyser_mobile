@@ -1,14 +1,12 @@
 import React from 'react'
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import AppBar from './Appbar'
+import { ScrollView } from 'react-native-gesture-handler'
 
 export default function FIRForm() {
     return (
-        // <View style={styles.container}>
-        <>
-            {/* <AppBar title="Crime Report Form"/> */}
+        <ScrollView style={styles.container}>
             <View style={styles.regform}>
-                {/* <Text style={styles.header}>Crime Report Form</Text> */}
+                <Text style={styles.header}>Crime Report Form</Text>
                 <Text style={styles.text}>Personal Details of the Complainant/Informant </Text>
                 <TextInput style={styles.textInput} placeholder="Name" underlineColorAndroid={'transparent'} />
                 <TextInput style={styles.textInput} placeholder="Father's/Husband's Name" underlineColorAndroid={'transparent'} />
@@ -24,11 +22,16 @@ export default function FIRForm() {
                     <Text style={styles.btnText}>SUBMIT</Text>
                 </TouchableOpacity>
             </View>
-        </>
+        </ScrollView>
     )
 }
 
 const styles = StyleSheet.create({
+    container: {
+        backgroundColor: '#36485f',
+        paddingLeft: 60,
+        paddingRight: 60
+    },
     regform: {
         alignSelf: "stretch",
         paddingTop: 100

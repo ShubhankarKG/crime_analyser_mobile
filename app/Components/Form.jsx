@@ -1,12 +1,12 @@
 import React from 'react'
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import {Menu} from 'react-native-paper'
+import { ScrollView } from 'react-native-gesture-handler'
 
 export default function Form() {
     return (
-        // <View style={styles.container}>
+        <ScrollView style={styles.container}>
             <View style={styles.regform}>
-                {/* <Text style={styles.header}>User Form</Text> */}
+                <Text style={styles.header}>User Form</Text>
                 <TextInput style={styles.textInput} placeholder="First Name" underlineColorAndroid={'transparent'} />
                 <TextInput style={styles.textInput} placeholder="Last Name" underlineColorAndroid={'transparent'} />
                 <TextInput style={styles.textInput} placeholder="Age" underlineColorAndroid={'transparent'} />
@@ -20,11 +20,16 @@ export default function Form() {
                     <Text style={styles.btnText}>SUBMIT</Text>
                 </TouchableOpacity>
             </View>
-        // </View>
+        </ScrollView>
     )
 }
 
 const styles = StyleSheet.create({
+    container: {
+        backgroundColor: '#36485f',
+        paddingLeft: 60,
+        paddingRight: 60,
+    },
     regform: {
         alignSelf: "stretch",
         paddingTop: 100
