@@ -3,10 +3,8 @@ import React, { useEffect, useState } from 'react'
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import axios from "axios";
-import 'dotenv/config';
-import { REACT_APP_API_KEY } from "react-native-dotenv";
 
-export default function Form() {
+export default function Form({navigation}) {
 
     const [form, updateForm] = React.useState({
         firstName: "",
@@ -22,9 +20,12 @@ export default function Form() {
 
     const [getDetails, toggleGetDetails] = useState(false);
 
+    React.useEffect(() => {
+        navigation.openDrawer();
+    }, [])
+
     useEffect(() => {
         if (getDetails && form.address !== "") {
-            console.log(REACT_APP_API_KEY);
             axios
                 .get("http://www.mapquestapi.com/geocoding/v1/address", {
                     params: {
@@ -33,7 +34,6 @@ export default function Form() {
                     },
                 })
                 .then((res) => {
-                    console.log(res.data.results[0].locations[0].latLng);
                     const { lat, lng } = res.data.results[0].locations[0].latLng;
                     updateForm((prevDetails) => ({
                         ...prevDetails,
@@ -57,11 +57,12 @@ export default function Form() {
     }
 
     const submitHandler = (event) => {
+        event.preventDefault()
         console.log(form);
-        // axios
-        //     .post("http://localhost:8000/users", form)
-        //     .then((res) => console.log(res))
-        //     .catch((err) => console.log(err));
+        axios
+            .post("http://localhost:8000/users", form)
+            .then((res) => console.log(res))
+            .catch((err) => console.log(err));
     };
 
     return (

@@ -1,36 +1,33 @@
 {
-  "main": "node_modules/expo/AppEntry.js",
+  "name": "server",
+  "version": "1.0.0",
+  "description": "server for crime_analyser_mobile",
+  "main": "server.js",
   "scripts": {
-    "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
-    "web": "expo start --web",
-    "eject": "expo eject"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "dev": "nodemon server.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ShubhankarKG/crime_analyser_mobile.git"
+  },
+  "author": "ShubhankarKG",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ShubhankarKG/crime_analyser_mobile/issues"
+  },
+  "homepage": "https://github.com/ShubhankarKG/crime_analyser_mobile#readme",
   "dependencies": {
-    "@react-native-community/masked-view": "0.1.10",
-    "@react-native-picker/picker": "^1.9.2",
-    "@react-navigation/drawer": "^5.10.6",
-    "@react-navigation/native": "^5.8.6",
-    "@react-navigation/stack": "^5.12.3",
-    "axios": "^0.21.0",
-    "expo": "~39.0.2",
-    "expo-status-bar": "~1.0.2",
-    "react": "16.13.1",
-    "react-dom": "16.13.1",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-39.0.4.tar.gz",
-    "react-native-dotenv": "^2.4.2",
-    "react-native-gesture-handler": "~1.7.0",
-    "react-native-paper": "^4.3.1",
-    "react-native-reanimated": "~1.13.0",
-    "react-native-safe-area-context": "3.1.4",
-    "react-native-screens": "~2.10.1",
-    "react-native-vector-icons": "^7.1.0",
-    "react-native-web": "~0.13.12",
-    "react-navigation": "^4.4.3"
+    "@material-ui/icons": "^4.9.1",
+    "bcrypt": "^5.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "pg": "^8.4.2"
   },
   "devDependencies": {
-    "@babel/core": "~7.9.0"
-  },
-  "private": true
+    "nodemon": "^2.0.6"
+  }
 }
