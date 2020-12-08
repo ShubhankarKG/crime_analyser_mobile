@@ -9,17 +9,23 @@ import Dashboard from "./Dashboard";
 const Drawer = createDrawerNavigator();
 
 function HomeScreen({ navigation }) {
+  const isLoggedIn = !!localStorage.getItem("token");
 
+  const gotoLoginPage = (e) => navigation.navigate("Login");
+  const logout = (e) => {
+    localStorage.clear();
+    navigation.navigate("Home");
+  };
 
-    const isLoggedIn = !!localStorage.getItem("token");
+  const btntext = !isLoggedIn ? "LOGIN" : "LOGOUT";
 
-    React.useLayoutEffect(() => {
+  React.useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
         <Button
           color="#888"
-          title="LOGIN"
-          onPress={() => navigation.navigate("Login")}
+          title={btntext}
+          onPress={isLoggedIn ? logout : gotoLoginPage}
         />
       ),
     });
@@ -30,9 +36,7 @@ function HomeScreen({ navigation }) {
       <Drawer.Screen name="Home" component={Home} />
       <Drawer.Screen name="User Form" component={Form} />
       <Drawer.Screen name="Crime Report Form" component={FIRForm} />
-      {isLoggedIn && (
-        <Drawer.Screen name="Dashboard" component={Dashboard} />
-      )}
+      {isLoggedIn && <Drawer.Screen name="Dashboard" component={Dashboard} />}
     </Drawer.Navigator>
   );
 }

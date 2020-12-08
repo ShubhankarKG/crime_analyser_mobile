@@ -2,8 +2,9 @@ const pool = require("../db");
 
 const users = {
   getUsers(req, res) {
-    const page = req.query.page ? req.query.page : 1;
-    const limit = req.query.limit ? req.query.limit : 20;
+    const page = req.query.page ? parseInt(req.query.page) : 1;
+    const limit = req.query.limit ? parseInt(req.query.limit) : 20;
+    console.log(req.query)
     const offset = (page - 1) * limit;
     pool.query(
       "SELECT * FROM users ORDER BY id ASC LIMIT $2 OFFSET $1",
@@ -30,7 +31,6 @@ const users = {
 
   getCount(req, res) {
     pool.query("SELECT COUNT(*) from users", (err, results) => {
-      console.log(results);
       if (err) {
         throw err;
       }

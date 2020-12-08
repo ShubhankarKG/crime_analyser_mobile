@@ -18,8 +18,8 @@ app.set("view engine", "ejs");
 app.use(express.static("fir-scanner/build"));
 
 app.get("/users", users.getUsers);
-app.get("/users/:id", users.getUserById);
 app.get("/users/count", users.getCount);
+app.get("/users/:id", users.getUserById);
 app.post("/users", users.createUser);
 app.put("/users/:id", users.updateUser);
 app.delete("/users/:id", users.deleteUser);
