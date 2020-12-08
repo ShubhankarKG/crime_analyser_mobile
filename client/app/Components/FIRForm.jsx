@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -19,7 +19,33 @@ export default function FIRForm({ navigation }) {
     place_of_occurrence: "",
     offence_desc: "",
     offenceSection: "",
+    latitude: "",
+    longitude: "",
   });
+  const [getDetails, toggleGetDetails] = useState(false);
+
+  useEffect(() => {
+    if (getDetails && form.place_of_occurrence !== "") {
+      axios
+        .get("http://www.mapquestapi.com/geocoding/v1/address", {
+          params: {
+            key: process.env.REACT_APP_API_KEY,
+            location: form.place_of_occurrence,
+          },
+        })
+        .then((res) => {
+          const { lat, lng } = res.data.results[0].locations[0].latLng;
+          updateForm((prevDetails) => ({
+            ...prevDetails,
+            latitude: lat,
+            longitude: lng,
+          }));
+        })
+        .catch((err) => {
+          console.log("ERR: ", err.toString());
+        });
+    }
+  }, [form.place_of_occurrence, getDetails]);
 
   const handleChange = (name, value) => {
     updateForm((prevDetails) => {
@@ -37,7 +63,10 @@ export default function FIRForm({ navigation }) {
   const submitHandler = (event) => {
     axios
       .post("http://localhost:8000/crime_reports", form)
-      .then((res) => console.log(res))
+      .then((res) => {
+        console.log(res);
+        navigation.navigate("Home");
+      })
       .catch((err) => console.log(err));
   };
 
@@ -89,6 +118,26 @@ export default function FIRForm({ navigation }) {
           onChangeText={(val) => handleChange("place_of_occurrence", val)}
           style={styles.textInput}
           placeholder="Place"
+          underlineColorAndroid={"transparent"}
+        />
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => toggleGetDetails(true)}
+        >
+          <Text style={styles.btnText}>Get Location</Text>
+        </TouchableOpacity>
+        <TextInput
+          editable={false}
+          value={form.longitude}
+          style={styles.textInput}
+          placeholder="Longitude"
+          underlineColorAndroid={"transparent"}
+        />
+        <TextInput
+          editable={false}
+          value={form.latitude}
+          style={styles.textInput}
+          placeholder="Latitude"
           underlineColorAndroid={"transparent"}
         />
         <Text style={styles.text}>Offence</Text>

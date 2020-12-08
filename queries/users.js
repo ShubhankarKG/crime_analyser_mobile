@@ -4,7 +4,7 @@ const users = {
   getUsers(req, res) {
     const page = req.query.page ? parseInt(req.query.page) : 1;
     const limit = req.query.limit ? parseInt(req.query.limit) : 20;
-    console.log(req.query)
+    console.log(req.query);
     const offset = (page - 1) * limit;
     pool.query(
       "SELECT * FROM users ORDER BY id ASC LIMIT $2 OFFSET $1",
@@ -41,14 +41,14 @@ const users = {
   createUser(request, response) {
     var firstName = "";
     var lastName = "";
-    const { email, gender, address, age } = request.body;
+    const { email, gender, address, age, latitude, longitude } = request.body;
     if (request.body.firstName) firstName = request.body.firstName;
     if (request.body.lastName) lastName = request.body.lastName;
     const name = `${firstName} ${lastName}`;
     const intAge = parseInt(age);
     pool.query(
-      "INSERT INTO users (name, email, gender, age, address) VALUES ($1, $2, $3, $4, $5)",
-      [name, email, gender, intAge, address],
+      "INSERT INTO users (name, email, gender, age, address, latlng) VALUES ($1, $2, $3, $4, $5, POINT($6, $7))",
+      [name, email, gender, intAge, address, longitude, latitude],
       (error, results) => {
         if (error) {
           throw error;

@@ -36,11 +36,12 @@ const crime_reports = {
       email,
       address,
       place_of_occurrence,
-      latlng,
+      latitude,
+      longitude,
       offence_desc,
     } = req.body;
     pool.query(
-      "INSERT INTO crime_reports (name, spousename, contact, email, address, place_of_occurrence, latlng, offence_desc) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)",
+      "INSERT INTO crime_reports (name, spousename, contact, email, address, place_of_occurrence, latlng, offence_desc) VALUES ($1, $2, $3, $4, $5, $6, POINT($8, $7), $9)",
       [
         name,
         spousename,
@@ -48,7 +49,8 @@ const crime_reports = {
         email,
         address,
         place_of_occurrence,
-        latlng,
+        latitude,
+        longitude,
         offence_desc,
       ],
       (err, results) => {

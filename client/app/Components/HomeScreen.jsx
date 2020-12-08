@@ -32,7 +32,7 @@ function HomeScreen({ navigation }) {
   }, [navigation]);
 
   return (
-    <Drawer.Navigator initialRouteName={isLoggedIn ? "Dashboard" : "User Form"}>
+    <Drawer.Navigator initialRouteName={isLoggedIn ? "Dashboard" : "Home"}>
       <Drawer.Screen name="Home" component={Home} />
       <Drawer.Screen name="User Form" component={Form} />
       <Drawer.Screen name="Crime Report Form" component={FIRForm} />
