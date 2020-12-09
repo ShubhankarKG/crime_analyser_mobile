@@ -38,7 +38,8 @@ app.post("/login", auth.loginAuth);
 app.post("/verify", auth.verify);
 
 app.get("/gdb", gdb.getData);
-app.get("/gdb/:location", gdb.getTableData);
+app.get("/gdb/location", gdb.getTableData);
+app.post("/gdb/custom", gdb.getCustomData);
 
 app.get("/*", (req, res) => {
   res.sendFile(path.join(__dirname, "fir-scanner/build/index.html"));
