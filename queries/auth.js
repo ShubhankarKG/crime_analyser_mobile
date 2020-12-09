@@ -1,14 +1,16 @@
 const bcrypt = require("bcrypt");
 const pool = require("../db");
 const jwt = require("jsonwebtoken");
+const axios = require("axios");
 
+let token = "";
 //authorization
 const auth = {
   async registerAuth(req, res) {
-    const { email, name, password } = req.body;;
+    const { email, name, password } = req.body;
     try {
       const authUser = await pool.query("SELECT * FROM auth WHERE email = $1", [
-        email
+        email,
       ]);
 
       if (authUser.rows.length > 0) {
@@ -36,7 +38,7 @@ const auth = {
     const { email, password } = req.body;
     try {
       const auth = await pool.query("SELECT * FROM auth WHERE email = $1", [
-        email
+        email,
       ]);
 
       if (auth.rows.length === 0) {
@@ -76,23 +78,56 @@ const auth = {
       } catch (err) {
         res.status(401).json({ msg: "Token is not valid" });
       }
-    }
-    catch (err) {
+    } catch (err) {
       console.error(err.message);
       res.status(500).send(err);
     }
+  },
 
-  }
-}
+  getClientToken(req, res) {
+    token = req.body.token;
+    res.status(200).json({ token: "Accepted" });
+  },
+
+  async pushNotif(req, res) {
+    const body = {
+      notification: {
+        body: "You are venturing close! Stay safe",
+        title: "Crime Alert!",
+        icon:
+          "http://www.liberaldictionary.com/wp-content/uploads/2019/02/icon-0326.jpg",
+      },
+      data: {
+        body:
+          "You are in clise vicinity of a high crime rate zone, keep yourself alert!",
+        title: "In vicinity of high crime regions",
+      },
+      to: token,
+    };
+
+    const headers = {
+      Authorization: `key=${process.env.SERVER_KEY}`,
+      "Content-Type": "application/json",
+    };
+    axios
+      .post("https://fcm.googleapis.com/fcm/send", JSON.stringify(body), {
+        headers,
+      })
+      .then((response) =>
+        res.status(200).json({ response: "Message sent" })
+      )
+      .catch((err) => res.status(500).json({ error: err.toString() }));
+  },
+};
 
 function jwtGenerator(auth_id) {
   const payload = {
     auth: {
-      id: auth_id
-    }
+      id: auth_id,
+    },
   };
 
-  return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: 3600 })
+  return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: 3600 });
 }
 
 module.exports = auth;

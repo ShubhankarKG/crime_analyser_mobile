@@ -36,6 +36,8 @@ app.delete("/crime_reports/:crime_id", crime_reports.deleteCrimeReport);
 app.post("/register", auth.registerAuth);
 app.post("/login", auth.loginAuth);
 app.post("/verify", auth.verify);
+app.post("/token", auth.getClientToken);
+app.post("/notif", auth.pushNotif);
 
 app.get("/gdb", gdb.getData);
 app.get("/gdb/location", gdb.getTableData);
