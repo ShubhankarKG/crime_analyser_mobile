@@ -5,11 +5,14 @@ const path = require("path");
 const users = require("./queries/users");
 const crime_reports = require("./queries/crime_reports");
 const auth = require("./queries/auth");
+const gdb = require("./queries/gdb");
 
 const app = express();
-app.use(cors({
-    origin: "*"
-}));
+app.use(
+  cors({
+    origin: "*",
+  })
+);
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 
@@ -34,12 +37,14 @@ app.post("/register", auth.registerAuth);
 app.post("/login", auth.loginAuth);
 app.post("/verify", auth.verify);
 
+app.get("/gdb", gdb.getData);
+app.get("/gdb/:location", gdb.getTableData);
+
 app.get("/*", (req, res) => {
   res.sendFile(path.join(__dirname, "fir-scanner/build/index.html"));
 });
 
-const PORT = process.
-env.PORT || 8000;
+const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
   console.log(`Server started on port ${PORT}`);
 });
