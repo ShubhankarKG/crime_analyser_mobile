@@ -7,6 +7,8 @@ const crime_reports = require("./queries/crime_reports");
 const auth = require("./queries/auth");
 const gdb = require("./queries/gdb");
 
+// const {messaging} = require("./firebaseInit");
+
 const app = express();
 app.use(
   cors({
@@ -49,5 +51,6 @@ app.get("/*", (req, res) => {
 
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
+  // console.log(messaging);
   console.log(`Server started on port ${PORT}`);
 });

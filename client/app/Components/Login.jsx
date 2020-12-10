@@ -55,6 +55,7 @@ export default function Login({navigation}) {
           value={password}
           textContentType="password"
           onChangeText={(val) => setPassword(val)}
+	  secureTextEntry={true}
           style={styles.textInput}
           placeholder="password"
           underlineColorAndroid={"transparent"}

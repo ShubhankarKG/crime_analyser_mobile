@@ -25,9 +25,11 @@
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "firebase-admin": "^9.4.2",
     "jsonwebtoken": "^8.5.1",
     "neo4j-driver": "^4.2.1",
-    "pg": "^8.4.2"
+    "pg": "^8.4.2",
+    "pg-postgis-types": "^3.0.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.6"

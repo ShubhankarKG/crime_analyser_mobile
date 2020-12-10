@@ -2,6 +2,7 @@ const bcrypt = require("bcrypt");
 const pool = require("../db");
 const jwt = require("jsonwebtoken");
 const axios = require("axios");
+const { sendNotificationToClient } = require("../notify");
 
 let token = "";
 //authorization
@@ -90,33 +91,38 @@ const auth = {
   },
 
   async pushNotif(req, res) {
-    const body = {
-      notification: {
-        body: "You are venturing close! Stay safe",
-        title: "Crime Alert!",
-        icon:
-          "http://www.liberaldictionary.com/wp-content/uploads/2019/02/icon-0326.jpg",
-      },
-      data: {
-        body:
-          "You are in clise vicinity of a high crime rate zone, keep yourself alert!",
-        title: "In vicinity of high crime regions",
-      },
-      to: token,
-    };
+    const { latitude, longitude } = req.body;
+    console.log(latitude, longitude);
+    const result = await pool.query(
+      "select distinct upper(location) from crime_stats where st_within(crime_stats.the_geom, st_buffer(st_geomfromtext('POINT(' || $1 || ' ' || $2 || ')', 4326), 0.4)) = TRUE order by upper(location) limit 10;",
+      [parseFloat(longitude), parseFloat(latitude)]
+    );
+    try {
+      if (result.rowCount > 3) {
+        const tokens = [token];
+        const notification = {
+          body: "You are venturing close! Stay safe",
+          title: "Crime Alert!",
+        };
 
-    const headers = {
-      Authorization: `key=${process.env.SERVER_KEY}`,
-      "Content-Type": "application/json",
-    };
-    axios
-      .post("https://fcm.googleapis.com/fcm/send", JSON.stringify(body), {
-        headers,
-      })
-      .then((response) =>
-        res.status(200).json({ response: "Message sent" })
-      )
-      .catch((err) => res.status(500).json({ error: err.toString() }));
+        sendNotificationToClient(tokens, notification);
+        res.status(200).json({ data: result.rows });
+        // const headers = {
+        //   Authorization: `key=${process.env.SERVER_KEY}`,
+        //   "Content-Type": "application/json",
+        // };
+        // axios
+        //   .post("https://fcm.googleapis.com/fcm/send", JSON.stringify(body), {
+        //     headers,
+        //   })
+        //   .then((response) => res.status(200).json({ data: result.rows }))
+        //   .catch((err) => res.status(500).json({ error: err.toString() }));
+      } else {
+        res.status(200).json({ message: "Safe" });
+      }
+    } catch (err) {
+      res.status(500).json({ error: err.toString() });
+    }
   },
 };
 
